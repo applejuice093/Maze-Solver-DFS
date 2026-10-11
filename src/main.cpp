@@ -1,6 +1,7 @@
 // main.cpp - Command line entry point.
 //
 // Usage: maze_solver <file.edges>
+// Exit codes: 0 = path found, 1 = goal unreachable, 2 = usage or input error.
 // Prints the path from start to goal, or exits with status 1 if none exists.
 #include <iostream>
 
