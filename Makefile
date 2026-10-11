@@ -11,7 +11,13 @@ $(BUILD)/maze_solver: $(LIB_SRC) src/main.cpp src/*.h | $(BUILD)
 $(BUILD):
 	mkdir -p $(BUILD)
 
+$(BUILD)/test_dfs: $(LIB_SRC) tests/test_dfs.cpp src/*.h | $(BUILD)
+	$(CXX) $(CXXFLAGS) -UNDEBUG $(LIB_SRC) tests/test_dfs.cpp -o $@
+
+test: $(BUILD)/test_dfs
+	./$(BUILD)/test_dfs
+
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all clean
+.PHONY: all clean test
