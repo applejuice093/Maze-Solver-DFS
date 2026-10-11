@@ -39,11 +39,17 @@ After finding the exit, the program identifies the valid route and can be extend
 ## 📂 Project Structure
 
 ```text
-├── maze/           # Source maze images and assets
-├── mazes/          # Additional maze test cases
-├── MazeFinal.exe   # Compiled executable for the solver
-├── README.md       # Project documentation
-└── Readme.txt      # Quick-start instructions
+├── src/
+│   ├── graph.h / graph.cpp   # Maze graph + .edges file parser
+│   ├── dfs.h / dfs.cpp       # Iterative DFS solver with backtracking
+│   └── main.cpp              # Command line entry point
+├── tests/test_dfs.cpp        # Unit tests (make test)
+├── maze/                     # Sample mazes: mazeN.png + mazeN.edges
+├── docs/EDGES_FORMAT.md      # Description of the .edges input format
+├── Makefile                  # Build, run and test targets
+├── MazeFinal.exe             # Pre-compiled Windows build
+├── README.md                 # Project documentation
+└── Readme.txt                # Quick-start pointer
 ```
 ### 🛠️ Requirements & Usage
 
