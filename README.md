@@ -51,21 +51,36 @@ After finding the exit, the program identifies the valid route and can be extend
 ├── README.md                 # Project documentation
 └── Readme.txt                # Quick-start pointer
 ```
-### 🛠️ Requirements & Usage
+## 🛠️ Requirements & Usage
 
-## Prerequisites
-A C++ compiler (GCC/Clang/MSVC)
+### Prerequisites
+* A C++17 compiler (GCC, Clang or MSVC)
+* `make` (optional, for the provided Makefile)
 
-Standard C++ libraries for file handling
+### Build from source
+```bash
+make            # builds build/maze_solver
+```
+Without make:
+```bash
+g++ -std=c++17 -O2 src/graph.cpp src/dfs.cpp src/main.cpp -o maze_solver
+```
 
-## Running the Solver
-Place your maze image in the /maze folder.
+### Running the solver
+```bash
+./build/maze_solver maze/maze1.edges
+# Path (17 cells): 1 -> 7 -> 8 -> 9 -> 15 -> ... -> 36
+make run        # solve every sample maze in maze/
+```
+The program exits with status `0` when a path is found, `1` when the goal is
+unreachable and `2` on bad input. See [docs/EDGES_FORMAT.md](docs/EDGES_FORMAT.md)
+to create your own mazes.
 
-## Run the executable:
+On Windows you can also run the bundled `MazeFinal.exe` and follow its prompts.
 
-```Bash
-./MazeFinal.exe
-Follow the on-screen prompts to select the image file and define start/end coordinates if required.
+### Running the tests
+```bash
+make test
 ```
 
 ## 👤 Author
