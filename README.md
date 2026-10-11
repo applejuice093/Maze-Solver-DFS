@@ -3,7 +3,7 @@
 [![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![Algorithm](https://img.shields.io/badge/Algorithm-DFS-red?style=for-the-badge)](https://en.wikipedia.org/wiki/Depth-first_search)
 
-A specialized C++ application designed to bridge the gap between image processing and graph theory. This tool takes a digital image of a maze (PNG) and utilizes **Depth First Search (DFS)** to find a viable path from a designated start point to the exit.
+A C++ application that models a maze as a graph and uses **Depth First Search (DFS)** to find a path from a designated start cell to the exit. Each sample maze ships as a PNG picture plus a text `.edges` graph that the solver reads.
 
 ---
 
@@ -84,7 +84,10 @@ On Windows you can also run the bundled `MazeFinal.exe` and follow its prompts.
 make test
 ```
 
+## 📄 License
+Released under the MIT License, see [LICENSE](LICENSE).
+
 ## 👤 Author
 applejuice093
 
-GitHub: @applejuice093
+GitHub: [@applejuice093](https://github.com/applejuice093)
