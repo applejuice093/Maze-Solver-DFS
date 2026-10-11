@@ -11,25 +11,26 @@ A specialized C++ application designed to bridge the gap between image processin
 
 The solver operates in three distinct phases:
 
-### 1. Image Parsing & File Handling
-The program reads the `.png` maze file and converts pixel data into a digital matrix. It distinguishes between:
-* **Walls:** Obstacles represented by specific pixel values (usually black).
-* **Paths:** Walkable space (usually white).
+### 1. Maze Representation
+Each maze image in `maze/` has a companion `.edges` file that describes the
+maze as a graph: every cell is a node and every open passage between two
+cells is an edge. The `# start` / `# goal` headers mark the entry and exit.
 
 ### 2. Algorithmic Solving (DFS)
 Once the grid is established, the engine applies the **Depth First Search** algorithm:
 * **Exploration:** It dives as deep as possible into a branch before backtracking.
-* **Stack Management:** Uses a stack-based approach (implicit recursion) to keep track of the current path.
+* **Stack Management:** Uses an explicit stack (no recursion), so large mazes cannot overflow the call stack. The stack always holds the current path.
 * **Path Identification:** Marks the successful route while avoiding cycles by tracking visited nodes.
 
 ### 3. Output Generation
-After finding the exit, the program identifies the valid route and can be extended to visualize the solution directly on the maze structure.
+After reaching the exit, the program prints the route as a sequence of cell ids. Neighbours are explored in ascending order, so the output is deterministic.
 
 ---
 
 ## ✨ Key Features
 
-- **Pixel-to-Grid Conversion:** Efficiently handles image files to create a logical map.
+- **Graph-based Input:** Simple text `.edges` format that is easy to write by hand.
+- **Tested:** Unit tests cover backtracking, cycles, unreachable goals and malformed input.
 - **Backtracking Logic:** Implements robust DFS to ensure all possible paths are explored until a solution is found.
 - **Executable Ready:** Includes a pre-compiled `MazeFinal.exe` for quick testing on Windows environments.
 - **Custom Maze Support:** Capable of processing various maze designs as long as they follow the supported image format.
