@@ -101,6 +101,17 @@ int main() {
         assert(threw);
     }
 
+    // A 200k-cell corridor would overflow the call stack of a recursive DFS;
+    // the iterative solver must handle it and return every cell in order.
+    Maze corridor;
+    const int kLen = 200000;
+    corridor.start = 0;
+    corridor.goal = kLen - 1;
+    for (int i = 0; i + 1 < kLen; ++i) corridor.addEdge(i, i + 1);
+    std::vector<int> longPath = solveDFS(corridor);
+    assert(longPath.size() == static_cast<size_t>(kLen));
+    assert(isValidPath(corridor, longPath));
+
     // Bundled sample mazes must all be solvable.
     for (const char* f : {"maze/maze1.edges", "maze/maze2.edges", "maze/maze3.edges"}) {
         Maze m = loadEdgesFile(f);
