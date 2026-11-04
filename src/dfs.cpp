@@ -10,8 +10,10 @@
 #include <utility>
 
 std::vector<int> solveDFS(const Maze& maze) {
-    if (maze.start == maze.goal) return {maze.start};
+    // A start cell that is not part of the maze can never lead anywhere,
+    // even when it equals the goal.
     if (!maze.hasNode(maze.start)) return {};
+    if (maze.start == maze.goal) return {maze.start};
 
     // Sort every neighbour list once up front. Previously the list of the
     // current node was copied and re-sorted on every loop iteration, which

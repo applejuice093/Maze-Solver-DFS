@@ -46,6 +46,12 @@ int main() {
     Maze same = parse("# start 2\n# goal 2\n1 2\n");
     assert((solveDFS(same) == std::vector<int>{2}));
 
+    // Start == goal but the cell is not in the maze: no path.
+    Maze ghost;
+    ghost.start = ghost.goal = 7;
+    ghost.addEdge(1, 2);
+    assert(solveDFS(ghost).empty());
+
     // Missing header is rejected.
     bool threw = false;
     try { parse("1 2\n"); } catch (const std::runtime_error&) { threw = true; }
