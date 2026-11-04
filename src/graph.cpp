@@ -21,11 +21,14 @@ Maze parseEdges(std::istream& in) {
         std::string first;
         if (!(ss >> first)) continue;  // blank line
 
-        if (first == "#") {
+        if (first[0] == '#') {
             // Header comments: "# start N" / "# goal N"; others are ignored.
+            // The space after '#' is optional, so "#start N" works too
+            // (it used to be misread as an edge line and rejected).
+            std::istringstream hs(line.substr(line.find('#') + 1));
             std::string key;
             int value;
-            if (ss >> key >> value) {
+            if (hs >> key >> value) {
                 if (key == "start") m.start = value;
                 else if (key == "goal") m.goal = value;
             }
