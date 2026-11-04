@@ -20,7 +20,9 @@ struct Maze {
     bool hasNode(int n) const { return adj.count(n) > 0; }
 };
 
-// Parse a maze from a stream. Throws std::runtime_error on malformed input.
+// Parse a maze from a stream. Throws std::runtime_error (with the offending
+// line number where possible) on malformed input, on missing, duplicate or
+// invalid start/goal headers and when start/goal is not part of any edge.
 Maze parseEdges(std::istream& in);
 
 // Convenience wrapper that opens and parses a file.
