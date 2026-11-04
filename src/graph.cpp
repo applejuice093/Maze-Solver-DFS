@@ -72,6 +72,16 @@ Maze parseEdges(std::istream& in) {
     if (m.start < 0 || m.goal < 0) {
         throw std::runtime_error("missing '# start' or '# goal' header");
     }
+    // Catch typos such as "# goal 63" in a maze whose exit is cell 64: the
+    // solver would otherwise just report "no path".
+    if (!m.hasNode(m.start)) {
+        throw std::runtime_error("start node " + std::to_string(m.start) +
+                                 " does not appear in any edge");
+    }
+    if (!m.hasNode(m.goal)) {
+        throw std::runtime_error("goal node " + std::to_string(m.goal) +
+                                 " does not appear in any edge");
+    }
     return m;
 }
 

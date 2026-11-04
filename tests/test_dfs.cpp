@@ -93,6 +93,14 @@ int main() {
     catch (const std::runtime_error&) { threw = true; }
     assert(threw);
 
+    // Start or goal that is not part of any edge is reported.
+    for (const char* bad : {"# start 9\n# goal 2\n1 2\n",
+                            "# start 1\n# goal 9\n1 2\n"}) {
+        threw = false;
+        try { parse(bad); } catch (const std::runtime_error&) { threw = true; }
+        assert(threw);
+    }
+
     // Bundled sample mazes must all be solvable.
     for (const char* f : {"maze/maze1.edges", "maze/maze2.edges", "maze/maze3.edges"}) {
         Maze m = loadEdgesFile(f);
