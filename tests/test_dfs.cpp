@@ -87,6 +87,12 @@ int main() {
         assert(threw);
     }
 
+    // Negative node ids are rejected (-1 is the "unset" marker).
+    threw = false;
+    try { parse("# start 1\n# goal 2\n1 -2\n"); }
+    catch (const std::runtime_error&) { threw = true; }
+    assert(threw);
+
     // Bundled sample mazes must all be solvable.
     for (const char* f : {"maze/maze1.edges", "maze/maze2.edges", "maze/maze3.edges"}) {
         Maze m = loadEdgesFile(f);

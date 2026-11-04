@@ -55,6 +55,10 @@ Maze parseEdges(std::istream& in) {
             throw std::runtime_error("line " + std::to_string(lineNo) +
                                      ": expected two node ids");
         }
+        if (a < 0 || b < 0) {
+            throw std::runtime_error("line " + std::to_string(lineNo) +
+                                     ": node ids must be non-negative");
+        }
         // Anything after the two ids must be a trailing "# comment". Before,
         // lines such as "1 2 3" or "1 2x" were silently accepted as "1 2".
         std::string rest;
