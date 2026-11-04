@@ -17,8 +17,9 @@ $(BUILD)/test_dfs: $(LIB_SRC) tests/test_dfs.cpp src/*.h | $(BUILD)
 run: $(BUILD)/maze_solver
 	@for f in maze/*.edges; do echo "$$f"; ./$(BUILD)/maze_solver $$f; done
 
-test: $(BUILD)/test_dfs
+test: $(BUILD)/test_dfs $(BUILD)/maze_solver
 	./$(BUILD)/test_dfs
+	sh tests/cli_test.sh ./$(BUILD)/maze_solver
 
 clean:
 	rm -rf $(BUILD)
