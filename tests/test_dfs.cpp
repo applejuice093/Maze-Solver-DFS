@@ -62,6 +62,17 @@ int main() {
     try { parse("# start 1\n# goal 2\n1 x\n"); } catch (const std::runtime_error&) { threw = true; }
     assert(threw);
 
+    // Extra tokens after an edge are rejected...
+    for (const char* bad : {"1 2 3\n", "1 2x\n"}) {
+        threw = false;
+        try { parse(std::string("# start 1\n# goal 2\n") + bad); }
+        catch (const std::runtime_error&) { threw = true; }
+        assert(threw);
+    }
+    // ...but a trailing comment is fine.
+    Maze commented = parse("# start 1\n# goal 2\n1 2  # corridor\n");
+    assert((solveDFS(commented) == std::vector<int>{1, 2}));
+
     // Bundled sample mazes must all be solvable.
     for (const char* f : {"maze/maze1.edges", "maze/maze2.edges", "maze/maze3.edges"}) {
         Maze m = loadEdgesFile(f);
