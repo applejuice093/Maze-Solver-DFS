@@ -101,6 +101,10 @@ int main() {
         assert(threw);
     }
 
+    // Files saved on Windows (CRLF line endings) parse the same way.
+    Maze crlf = parse("# start 1\r\n# goal 3\r\n1 2\r\n2 3 # end\r\n");
+    assert((solveDFS(crlf) == std::vector<int>{1, 2, 3}));
+
     // A 200k-cell corridor would overflow the call stack of a recursive DFS;
     // the iterative solver must handle it and return every cell in order.
     Maze corridor;
