@@ -42,3 +42,4 @@
 
 # Build output
 build/
+build-cmake/
