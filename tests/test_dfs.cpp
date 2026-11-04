@@ -77,6 +77,16 @@ int main() {
     Maze tight = parse("#start 1\n#goal 2\n#comment\n1 2\n");
     assert(tight.start == 1 && tight.goal == 2);
 
+    // Malformed, negative or repeated start/goal headers are rejected.
+    for (const char* bad : {"# start x\n# goal 2\n1 2\n",
+                            "# start -1\n# goal 2\n1 2\n",
+                            "# start 1 2\n# goal 2\n1 2\n",
+                            "# start 1\n# start 2\n# goal 2\n1 2\n"}) {
+        threw = false;
+        try { parse(bad); } catch (const std::runtime_error&) { threw = true; }
+        assert(threw);
+    }
+
     // Bundled sample mazes must all be solvable.
     for (const char* f : {"maze/maze1.edges", "maze/maze2.edges", "maze/maze3.edges"}) {
         Maze m = loadEdgesFile(f);

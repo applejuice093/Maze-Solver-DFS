@@ -27,10 +27,24 @@ Maze parseEdges(std::istream& in) {
             // (it used to be misread as an edge line and rejected).
             std::istringstream hs(line.substr(line.find('#') + 1));
             std::string key;
-            int value;
-            if (hs >> key >> value) {
-                if (key == "start") m.start = value;
-                else if (key == "goal") m.goal = value;
+            if (hs >> key && (key == "start" || key == "goal")) {
+                // A malformed value used to be ignored silently, which then
+                // surfaced as a misleading "missing header" error.
+                int value;
+                std::string extra;
+                if (!(hs >> value) || value < 0 ||
+                    (hs >> extra && extra[0] != '#')) {
+                    throw std::runtime_error(
+                        "line " + std::to_string(lineNo) + ": '# " + key +
+                        "' needs exactly one non-negative node id");
+                }
+                int& slot = (key == "start") ? m.start : m.goal;
+                if (slot >= 0) {
+                    throw std::runtime_error("line " + std::to_string(lineNo) +
+                                             ": duplicate '# " + key +
+                                             "' header");
+                }
+                slot = value;
             }
             continue;
         }
