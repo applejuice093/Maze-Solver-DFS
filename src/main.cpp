@@ -1,20 +1,33 @@
 // main.cpp - Command line entry point.
 //
-// Usage: maze_solver <file.edges>
+// Usage: maze_solver <file.edges>   (use "-" to read the maze from stdin)
 // Exit codes: 0 = path found, 1 = goal unreachable, 2 = usage or input error.
 // Prints the path from start to goal, or exits with status 1 if none exists.
 #include <iostream>
+#include <string>
 
 #include "dfs.h"
 #include "graph.h"
 
+static void usage(std::ostream& out, const char* prog) {
+    out << "usage: " << prog << " <maze.edges | ->\n"
+        << "Find a path from '# start' to '# goal' with depth first search.\n"
+        << "Pass '-' to read the maze from standard input.\n"
+        << "Exit status: 0 path found, 1 no path, 2 usage or input error.\n";
+}
+
 int main(int argc, char** argv) {
     if (argc != 2) {
-        std::cerr << "usage: " << argv[0] << " <maze.edges>\n";
+        usage(std::cerr, argv[0]);
         return 2;
     }
+    const std::string arg = argv[1];
+    if (arg == "-h" || arg == "--help") {
+        usage(std::cout, argv[0]);
+        return 0;
+    }
     try {
-        Maze maze = loadEdgesFile(argv[1]);
+        Maze maze = (arg == "-") ? parseEdges(std::cin) : loadEdgesFile(arg);
         std::vector<int> path = solveDFS(maze);
         if (path.empty()) {
             std::cout << "No path from " << maze.start << " to " << maze.goal << "\n";
