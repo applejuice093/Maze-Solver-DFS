@@ -30,10 +30,10 @@ After reaching the exit, the program prints the route as a sequence of cell ids.
 ## ✨ Key Features
 
 - **Graph-based Input:** Simple text `.edges` format that is easy to write by hand.
-- **Tested:** Unit tests cover backtracking, cycles, unreachable goals and malformed input.
+- **Strict input checking:** Malformed edges, bad or duplicate headers and start/goal cells that are not in the maze are reported with a line number instead of being silently ignored.
+- **Tested:** Unit tests cover backtracking, cycles, unreachable goals, malformed input and a 200k-cell maze; a shell script checks the command line exit codes.
 - **Backtracking Logic:** Implements robust DFS to ensure all possible paths are explored until a solution is found.
-- **Executable Ready:** Includes a pre-compiled `MazeFinal.exe` for quick testing on Windows environments.
-- **Custom Maze Support:** Capable of processing various maze designs as long as they follow the supported image format.
+- **Custom Maze Support:** Any maze can be solved once it is written down as an `.edges` graph (see [docs/EDGES_FORMAT.md](docs/EDGES_FORMAT.md)); the solver does not read the PNG images themselves.
 
 ---
 
@@ -45,10 +45,12 @@ After reaching the exit, the program prints the route as a sequence of cell ids.
 │   ├── dfs.h / dfs.cpp       # Iterative DFS solver with backtracking
 │   └── main.cpp              # Command line entry point
 ├── tests/test_dfs.cpp        # Unit tests (make test)
+├── tests/cli_test.sh         # Command line exit-code tests (make test)
 ├── maze/                     # Sample mazes: mazeN.png + mazeN.edges
 ├── docs/EDGES_FORMAT.md      # Description of the .edges input format
-├── Makefile                  # Build, run and test targets
-├── MazeFinal.exe             # Pre-compiled Windows build
+├── Makefile                  # Build, run, test and sanitize targets
+├── CMakeLists.txt            # Alternative CMake build (MSVC, IDEs, ctest)
+├── MazeFinal.exe             # Legacy Windows build of the original menu app
 ├── README.md                 # Project documentation
 └── Readme.txt                # Quick-start pointer
 ```
@@ -62,7 +64,13 @@ After reaching the exit, the program prints the route as a sequence of cell ids.
 ```bash
 make            # builds build/maze_solver
 ```
-Without make:
+With CMake (also works with Visual Studio / MSVC):
+```bash
+cmake -S . -B build-cmake
+cmake --build build-cmake
+ctest --test-dir build-cmake --output-on-failure
+```
+Without make or CMake:
 ```bash
 g++ -std=c++17 -O2 src/graph.cpp src/dfs.cpp src/main.cpp -o maze_solver
 ```
@@ -72,16 +80,21 @@ g++ -std=c++17 -O2 src/graph.cpp src/dfs.cpp src/main.cpp -o maze_solver
 ./build/maze_solver maze/maze1.edges
 # Path (17 cells): 1 -> 7 -> 8 -> 9 -> 15 -> ... -> 36
 make run        # solve every sample maze in maze/
+cat my.edges | ./build/maze_solver -   # read a maze from stdin
+./build/maze_solver --help
 ```
 The program exits with status `0` when a path is found, `1` when the goal is
 unreachable and `2` on bad input. See [docs/EDGES_FORMAT.md](docs/EDGES_FORMAT.md)
 to create your own mazes.
 
-On Windows you can also run the bundled `MazeFinal.exe` and follow its prompts.
+`MazeFinal.exe` is a legacy Windows build of the original interactive menu
+version of this project. It is not built from the current `src/` code; build
+from source (e.g. with CMake and MSVC) to get the current solver on Windows.
 
 ### Running the tests
 ```bash
-make test
+make test       # unit tests + command line tests
+make sanitize   # unit tests under AddressSanitizer and UBSan (GCC/Clang)
 ```
 
 ## 📄 License
